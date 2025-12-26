@@ -18,25 +18,38 @@ $gender  = $_POST['user_gender'] ?? '';
 
 $errors = [];
 
-if (!preg_match("/^[ぁ-んァ-ヶー一-龠a-zA-Zー々]+$/u", $name)) {
-    $errors[] = "名前はひらがな、カタカナ、漢字、英字のみ使用可能です。（現在の入力値: $name）";
+
+if (empty($name)) {
+    $errors[] = "名前を入力してください。";
+} elseif (!preg_match("/^[ぁ-んァ-ヶー一-龠a-zA-Zー々]+$/u", $name)) {
+    $errors[] = "名前はひらがな、カタカナ、漢字、英字のみ使用可能です。";
 }
 
-if (!is_numeric($age) || $age < 0 || $age > 150) {
-    $errors[] = "年齢は0～150の間で入力してください。（現在の入力値: $age）";
+if ($age === '') { 
+    $errors[] = "年齢を入力してください。";
+} elseif (!is_numeric($age) || $age < 0 || $age > 150) {
+    $errors[] = "年齢は0～150の間で入力してください。";
 }
 
-if (!preg_match("/^[0-9-]+$/", $phone)) {
+if (empty($phone)) {
+    $errors[] = "電話番号を入力してください。";
+} elseif (!preg_match("/^[0-9-]+$/", $phone)) {
     $errors[] = "電話番号は数字とハイフンのみで入力してください。";
 }
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (empty($email)) {
+    $errors[] = "メールアドレスを入力してください。";
+} elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errors[] = "メールアドレスの形式が正しくありません。";
 }
 
 if (empty($address)) {
     $errors[] = "住所を入力してください。";
+} elseif (!preg_match("/^[ぁ-んァ-ヶー一-龠a-zA-Zー々0-9０-９\s　、。-]+$/u", $address)) {
+  
+    $errors[] = "住所はひらがな、カタカナ、漢字、英字のみ使用可能です。";
 }
+
 
 if (count($errors) > 0) {
     echo "<h1>エラーが発生しました</h1>";
